@@ -1,0 +1,148 @@
+\documentclass[letter]{article}
+% Set target color model to RGB
+\usepackage[inner=2.0cm,outer=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[rgb]{xcolor}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{amsgen}
+\usepackage{amsmath}
+\usepackage{amstext}
+\usepackage{amsbsy}
+\usepackage{amsopn}
+\usepackage{tikz}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true, urlcolor=blue,  linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+\usepackage{enumitem}
+\usepackage{bbm}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%\usetikzlibrary{through,backgrounds}
+\hypersetup{%
+pdfauthor={Angel Xuan Chang},%
+pdftitle={Homework},%
+pdfkeywords={Tikz,latex,bootstrap,uncertaintes},%
+pdfcreator={PDFLaTeX},%
+pdfproducer={PDFLaTeX},%
+}
+%\usetikzlibrary{shadows}
+% \usepackage[francais]{babel}
+\usepackage{booktabs}
+% \input{macros.tex}
+
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{rem}[thm]{Remark}
+\numberwithin{equation}{section}
+
+\newcommand{\homework}[6]{
+   \pagestyle{myheadings}
+   \thispagestyle{plain}
+   \newpage
+   \setcounter{page}{1}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{\vspace{2mm}
+    \hbox to 6.28in { {\bf CMPT 413/713:~Natural Language Processing \hfill {\small (#2)}} }
+       \vspace{6mm}
+       \hbox to 6.28in { {\Large \hfill #1  \hfill} }
+       \vspace{6mm}
+       \hbox to 6.28in {  {\it Group Members: {\rm #3} } \hfill }
+	\hbox to 6.28in { { \it Group Name: {\rm #4} } \hfill}
+      \vspace{2mm}}
+   }
+   \end{center}
+   \markboth{#4 -- #1}{#4 -- #1}
+   \vspace*{4mm}
+}
+
+\newcommand{\problem}[2]{~\\\fbox{\textbf{Problem #1}}\newline\newline}
+\newcommand{\subproblem}[1]{~\newline\textbf{(#1)}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\Hy}{\mathcal{H}}
+\newcommand{\VS}{\textrm{VS}}
+
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbX}{\mathbb{X}}
+\newcommand{\bI}{\mathbf{I}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\bY}{\mathbf{Y}}
+\newcommand{\bepsilon}{\boldsymbol{\epsilon}}
+\newcommand{\balpha}{\boldsymbol{\alpha}}
+\newcommand{\bbeta}{\boldsymbol{\beta}}
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+
+\begin{document}
+\homework{Programming Homework \#3}{Due: 10/26/21}{Joshua Malmberg, Hewei Cao, Keenan Byun}{Mochi}
+
+
+\section{Objective}
+
+	Phrasal chunking is the task of partitioning a sentence into groups called phrasal chunks. Each phrasal chunk corresponds to an atomic syntactic group of words, ie. splitting the group up further would separate words which play the same syntactic role in a sentence. With a naïve phrasal chunking model, spelling mistakes and other forms of noise in the input are likely to lead to out-of-vocabulary words which significantly decrease the model performance. Robust phrasal chunking extends includes measures to account for noisy input and ensure performance. Given a naïve phrasal chunking model, our goal in this assignment is to implement a robust phrasal chunking algorithm.
+
+\section{Method}
+
+	To achieve robust phrasal chunking, we implemented three models and compared their relative performance.\newline
+
+	The first model expands the LSTM RNN in the default solution by expanding the input to include each words character-level representation in addition to the word embeddings. The character-level representation takes the form of a vector with three sub-vectors. The first and third sub-vectors are one-hot encodings of the first and last characters of the word, respectively; whereas, the second sub-vector is a bag-of-characters vector representing the interior characters of the word.\newline
+
+	The second model adds a second LSTM RNN. The hidden states of the new RNN is concatenated with the word embeddings as the input to the tagger RNN provided in the default solution. This new RNN takes as input the character-level representations of the words in the sentence and stores encodes information about them in the hidden state. The character-level representations used are similar to those in the first model, except that the second sub-vector is replaced with two vectors: one for the interior vowels of the word and one for the interior consonants of the word.\newline
+
+	The third model implements an scRNN to remove noise in the input words before they are fed to the tagger RNN. The new RNN added takes as inputs the same character-level representations used in the first model. To train the model, noise is added to a set of words which are fed as training data to the RNN. The cross-entropy loss was then computed by comparing the RNN predictions with the actual words, and the loss was backpropagated to tune the RNN.\newline
+
+
+\section{Results}
+
+\begin{center}
+\begin{tabular}{ |c|c| } 
+ \hline
+   & Dev Score  \\ 
+\hline
+Method 1 & 75.9  \\  
+Method 2 & 75.13 \\
+Method 2 w/ expanded CLR & 76.98 \\
+Method 3 & na \\
+ \hline
+\end{tabular}
+\end{center}
+
+	The best performance was obtained using method 2. A working version of method 3 was implemented, however the scores were very poor, indicating an issue with the training algorithm.
+
+\section{Contributions}
+
+\textbf{Hewei Cao:} Implemented Method 1 and Contributed to Jupyter Notebook; \textbf{Keenan Byun:} Implemented Method 2 and contributed to Jupyter Notebook; \textbf{Joshua Malmberg:} Implemented Method 3 and Wrote Report.
+
+\end{document}

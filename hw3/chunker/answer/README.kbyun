@@ -1,0 +1,5 @@
+1. implemented baseline method 2, achieved dev-score 75.3
+2. implemented smoothing on char-level representation and found best weights for smoothing (1 and 10)
+3. added new vector v4 to separate vowl of words
+
+achieved dev-score 76.98 with 2 and 3

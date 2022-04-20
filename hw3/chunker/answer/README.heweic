@@ -1,0 +1,6 @@
+
+
+Hewei Cao:
+1. implemented baseline method 1, achieved dev-score 76
+2. proposed using smoothing on all methods, raised dev-score with 1
+3. proposed add "word length" factor to the char-level representation. 

@@ -1,0 +1,39 @@
+
+1. change model size
+
+class LSTMTaggerModel
+  def __init__
+	---self.lstm = nn.LSTM(embedding_dim, hidden_dim, bidirectional=False)
+	+++self.lstm = nn.LSTM(embedding_dim+300, hidden_dim, bidirectional=False)
+
+
+
+
+2. create "index_to_word" in LSTMTagger, and pass it into LSTMTaggerModel
+	note: LSTMTagger.model is the class LSTMTaggerModel
+
+
+
+3. create char-level representation
+4. concatenate vectors in LSTMTaggerModel.forward
+
+import string
+
+        embeds = self.word_embeddings(sentence)
+        
+        char_level_rep = []
+        for w_ix in sentence:
+            word = self.ix_to_word[w_ix.item()]
+            v1 = [0]*100
+            v2 = [0]*100
+            v3 = [0]*100
+            v1[string.printable.index(word[0])] = 1
+            v3[string.printable.index(word[-1])] = 1
+            if(len(word)>2):
+                for i in range(1,len(word)):
+                    ind = string.printable.index(word[i])
+                    v2[ind] = v2[ind]+1
+            char_level_rep.append(v1+v2+v3)
+        char_level_rep = torch.tensor(char_level_rep)
+        
+        embeds = torch.cat([embeds, char_level_rep], dim=1)

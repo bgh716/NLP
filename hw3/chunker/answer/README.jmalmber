@@ -1,0 +1,2 @@
+1) Implemented method 3, including scRNN implementation/training and altered default.py LSTM Tagger model to take input from scRNN.
+2) Wrote report.
