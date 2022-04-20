@@ -1,0 +1,14 @@
+implement the attention baseline
+
+implemented the unknowm word replacement
+    use attention score to align the source sentence words and target sentene words.
+    for each pair of aligned source word and target word (s,t)
+        if s is OOV, t is OOV, 
+            we replace t with original source word score
+        else if s is not OOV, t is OOV,
+            if s is translatable,
+                replace t with translated s
+            else,
+                replace t with original s
+        else,
+            dont change

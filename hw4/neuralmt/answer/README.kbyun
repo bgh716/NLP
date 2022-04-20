@@ -1,0 +1,6 @@
+1. implemented attention baseline
+2. implemented giving penalty to repeated words
+3. implemented beam searching
+3-1. take top n outputs for each timestep
+3-2. save information about the n outputs(hidden layer, word sequence, alpha, and so on)
+3-3. expand the n outputs for the next timestep
