@@ -1,0 +1,144 @@
+\documentclass[letter]{article}
+% Set target color model to RGB
+\usepackage[inner=2.0cm,outer=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[rgb]{xcolor}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{amsgen}
+\usepackage{amsmath}
+\usepackage{amstext}
+\usepackage{amsbsy}
+\usepackage{amsopn}
+\usepackage{tikz}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true, urlcolor=blue,  linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+\usepackage{enumitem}
+\usepackage{bbm}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%\usetikzlibrary{through,backgrounds}
+\hypersetup{%
+pdfauthor={Angel Xuan Chang},%
+pdftitle={Homework},%
+pdfkeywords={Tikz,latex,bootstrap,uncertaintes},%
+pdfcreator={PDFLaTeX},%
+pdfproducer={PDFLaTeX},%
+}
+%\usetikzlibrary{shadows}
+% \usepackage[francais]{babel}
+\usepackage{booktabs}
+% \input{macros.tex}
+
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{rem}[thm]{Remark}
+\numberwithin{equation}{section}
+
+\newcommand{\homework}[6]{
+   \pagestyle{myheadings}
+   \thispagestyle{plain}
+   \newpage
+   \setcounter{page}{1}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{\vspace{2mm}
+    \hbox to 6.28in { {\bf CMPT 413/713:~Natural Language Processing \hfill {\small (#2)}} }
+       \vspace{6mm}
+       \hbox to 6.28in { {\Large \hfill #1  \hfill} }
+       \vspace{6mm}
+       \hbox to 6.28in {  {\it Group Members: {\rm #3} } \hfill }
+	\hbox to 6.28in { { \it Group Name: {\rm #4} } \hfill}
+      \vspace{2mm}}
+   }
+   \end{center}
+   \markboth{#4 -- #1}{#4 -- #1}
+   \vspace*{4mm}
+}
+
+\newcommand{\problem}[2]{~\\\fbox{\textbf{Problem #1}}\newline\newline}
+\newcommand{\subproblem}[1]{~\newline\textbf{(#1)}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\Hy}{\mathcal{H}}
+\newcommand{\VS}{\textrm{VS}}
+
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbX}{\mathbb{X}}
+\newcommand{\bI}{\mathbf{I}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\bY}{\mathbf{Y}}
+\newcommand{\bepsilon}{\boldsymbol{\epsilon}}
+\newcommand{\balpha}{\boldsymbol{\alpha}}
+\newcommand{\bbeta}{\boldsymbol{\beta}}
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+
+\begin{document}
+\homework{Programming Homework \#2}{Due: 10/12/21}{Joshua Malmberg, Hewei Cao, Keenan Byun}{Mochi}
+
+
+\section{Objective}
+
+The aim of this assignment is to implement a lexical substitution algorithm with semantic retrofitting. Lexical substitution is the task of predicting a replacement for a target word in a sentence, based on the context in which it is used. Given a dataset contain word vectors for every in the vocabulary, a replacement word can be selected by taking the word whose word vector is most similar to the target word’s word vector. In this instance, we use cosine similarity to compare two vectors. For this assignment, the word vectors and synonym sets for the vocabulary are provided. We retrofit the word vectors to match the semantic information stored in the lexicon, producing a more effective lexical substitution model.
+
+\section{Method}
+
+Initially, we implemented a baseline retrofitting algorithm based on the example algorithm provided in the assignment description. For the baseline, we set all the alpha and beta retrofitting parameters to 1 and the time steps to 10. To access the synonym sets from our program, we used a Python dictionary, with each synonym set stored in a key-value pair. The member of each synonym set listed first in the text file was used as the key, and the remaining words composed the value. When retrofitting, our baseline algorithm searched for each word in the keys of the dictionary and updated that words word vector if it was found. This approach does not fully utilize the semantic information in the synonym sets, leading to poor performance. We attempted to address this by creating a second dictionary to record which sets each word belonged to. Using this data structure, the retrofitting algorithm can efficiently access all the relevant synonym sets for each word.
+The baseline model was also limited by the alpha and beta parameters used when updating each word vectors. Ideally, when updating word vectors there should be a balance between the contributions of the old word vector and the synonym word vectors. However, some words may have an immense number of synonyms, in which case the contribution of the synonyms grossly outweighs that of the old word vector. To address this issue, we enforced the condition:
+\begin{equation*}
+\Sigma_{j:(i,j)\in E} \beta_{ij} = c\alpha_i, \forall i\in V, constant\: c\in R
+\end{equation*}
+After this, we further tweaked the parameter c, iteration count T, and lexicon(s) used to maximize performance. Additionally, we created a second word vector file to store the new word vectors separately such that they would not be used when updating other word vectors in the same time step. Finally, we altered the similarity metric to use context words in addition to the target word when predicting a replacement.
+\section{Results}
+
+\begin{center}
+\begin{tabular}{ |c|c| } 
+ \hline
+   & Dev Score  \\ 
+\hline
+Baseline & 43.98  \\  
+Full Graph Best Segmentation & 37.52 \\
+Partial Graph Best & 50.03 \\
+ \hline
+\end{tabular}
+\end{center}
+
+We found that using a second data structure to access all the information in the synonym graph actually decreased performance. We obtained the highest performance using the partial graph, balanced $\alpha$ and $\beta$ parameters, parameters $c=0.5,T=25$, and only the Wordnet lexicon.
+
+\section{Contributions}
+
+\textbf{Hewei Cao:} Tested which lexicon and parameters provided best performance, improved retrofitting efficiency, debugged baseline; \textbf{Keenan Byun:} Implemented context substitution and debugged baseline, composed Jupyter Notebook detailing results; \textbf{Joshua Malmberg:} Implemented baseline retrofitting algorithm and wrote report.
+
+\end{document}

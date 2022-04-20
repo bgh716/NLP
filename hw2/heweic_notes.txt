@@ -1,0 +1,71 @@
+python3 answer/retrofit.py 
+python3 -m pymagnitude.converter -i data/glove.6B.100d.retrofit.txt -o data/glove.6B.100d.retrofit.magnitude
+python3 zipout.py
+python3 check.py
+
+
+
+
+
+
+
+
+
+
+w0: weight alpha =1
+w1: weight alpha = sum(beta)
+wn: weight alpha = sum(beta)*n
+
+
+g0: partial graph 
+g1: complete graph
+g0: partial graph, with each node has itself as neighbour
+
+f0: number&punctuation filter
+f1: no filter
+
+
+
+w0 g0 f0
+	43.9812
+w1(i) g0 f0
+	40.5755
+w1(i) g1 f0
+	37.5220
+w0 g1 f1
+	36.5238
+w0 g0 f1
+	44.1574
+w0 g0 f1 (inline expression)
+	43.6876
+w0 g0 f0 (inline expression)
+	43.6876
+w0 g0 f0 (inline expression)(all 4 lexicons)
+	36.2302
+w1 g0 f0 (inline expression)(all 4 lexicons)
+	38.1092
+w1 g1 f0 (inline expression)(all 4 lexicons)
+	32.7070
+w1 g0 f0 (inline expression)(take_new_steps)
+	47.0934
+w1 g0 f0 (inline expression)(take_new_steps)(3 lexicons)
+	39.0487
+w1 g0 f0 (inline expression)(take_new_steps)(wordnet ppdb)
+	44.4510
+w1 g0 f0 (inline expression)(take_new_steps)(ppdb)
+	46.4474
+w2 g0 f0 (inline expression)(take_new_steps)(ppdb)
+	40.2231
+w0 g0 f0 (inline expression)(take_new_steps)(ppdb)
+	44.5684
+w1.3 g0 f0 (inline expression)(take_new_steps)(ppdb)
+	43.5115
+w0.9 g0 f0 (inline expression)(take_new_steps)(ppdb)
+	46.9759
+w0.9 g0 f0 (inline expression)(take_new_steps)
+	48.4439
+w0.7 g0 f0 (inline expression)(take_new_steps)
+	48.9137
+w0.5 g0 f0 (inline expression)(take_new_steps)
+	49.9119
+	

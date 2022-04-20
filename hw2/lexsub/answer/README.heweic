@@ -1,0 +1,19 @@
+.
+1. adjusting the weights of optimizing equcation
+	collect dev-score of result with different weights.
+	in the end, we decide to let b=1 and a=(sum of all b)*0.5
+	
+
+2. modify the implementation of semantic lexicon graph
+	got lower scores in multiple test pairs, so aborted
+
+3. use inline expression for retrofit.py, made the retrofitting process faster
+
+4. propose different dataset may give different answer, and test which lexicons to use
+5. modify retrofit.py to allow multiple lexicons
+
+6. modify the iterating steps in retrofit.py
+	increase score from 44 to 47
+
+
+

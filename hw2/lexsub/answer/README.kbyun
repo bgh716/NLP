@@ -1,0 +1,14 @@
+1. polished baseline.(debugging)
+
+2. modified T to find better performance.
+
+3. implemented lexicon substitution using around word to predict target word.
+
+3-1. score calculation method implemented:
+(1). distance base (short distance with around word is better)
+(2). add method(cos similarity)
+(3). baladd method(cos cimilarity)
+
+3-2. implemented finding context words around of the target word.
+
+4. wrote Jupyter notebook
