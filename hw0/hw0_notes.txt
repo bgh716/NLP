@@ -1,0 +1,111 @@
+
+approach:
+	1. change "products of P(w)" to "sum of log10(P(w))"
+		score: 0.82
+		effect: equvalent, doesn't increase final score
+		
+analysis:
+	every wrong line follows same rule: "the last word is too long and not segemented."
+	case: "unclimatechangebody"
+		5 top segementations with their scores:	//scores are sum of log10
+			['unclimatechangebody']
+			-11.76946906492656
+			['unclimatechangebod', 'y']
+			-15.248877454922333
+			['u', 'nclimatechangebody']
+			-15.284594107909584
+			['unclimatechange', 'body']
+			-15.40361194398702
+			['un', 'climate', 'change', 'body']
+			-15.532385601337921
+
+	self test:
+	case: "unun"
+		['un', 'un']
+		-8.164744767644429
+		['u', 'nun']
+		-9.09413858341885
+		['unu', 'n']
+		-9.574811760592521
+		['unun']
+		-11.76946906492656
+	case: "unununun"
+		['ununun']
+		-11.76946906492656
+		['unu', 'nun']
+		-12.025792046687984
+		['un', 'un', 'un']
+		-12.247117151466643
+		['u', 'nun', 'un']
+		-13.176510967241065
+		['ununu', 'n']
+		-14.897502319266922
+analysis:
+	repeated word results in very small probability? might be less than 1/N
+	"ger" is in line 13269 of count_1w.txt
+	"gerger" is not existed
+	
+	self tests:
+	case: "gergergergerger"
+		['gergergergerger']
+		-11.76946906492656
+		['gergergergerge', 'r']
+		-15.029017865766795
+		['g', 'ergergergerger']
+		-15.181438477228347
+		['gergergergerg', 'er']
+		-16.30309183007963
+		['ge', 'rgergergerger']
+		-16.47154905665696
+	case: "gergergerger"
+		['gergergerger']
+		-11.76946906492656
+		['gergergerge', 'r']
+		-15.029017865766795
+		['g', 'ergergerger']
+		-15.181438477228347
+		['gergergerg', 'er']
+		-16.30309183007963
+		['ge', 'rgergerger']
+	case: "gergerger"
+		['gergerger']
+		-11.76946906492656
+		['gergerge', 'r']
+		-15.029017865766795
+		['g', 'ergerger']
+		-15.181438477228347
+		['ger', 'ger', 'ger']
+		-15.784700801672969
+		['gergerg', 'er']
+		-16.30309183007963
+	case: "gerger"
+		['ger', 'ger']
+		-10.52313386778198
+		['gerger']
+		-11.76946906492656
+		['gerg', 'er']
+		-11.780843268791939
+		['g', 'er', 'ger']
+		-13.207159111345849
+		['ge', 'r', 'ger']
+		-13.223195726461629
+
+approach: increase cost of long non-words
+	change 
+		self.missingfn = missingfn or (lambda k, N: 1./N)
+	to
+		self.missingfn = missingfn or (lambda k, N: 1./(N**len(k)))
+	score: 0.98
+	works very well
+
+analysis:
+	case "30secondstoearth":
+		segmentation: "3 0 seconds to earth"
+	numbers should be together
+
+approach: in split(), dont split numbers
+analysis: score: 1.00
+
+
+
+

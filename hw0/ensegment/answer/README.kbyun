@@ -1,0 +1,5 @@
+Keenan Byun
+
+Realised that missingfn value is the problem after hearing some hints from heweic
+tried to reduce the 1/N value from 0 to sys.int_min(improved program F-score:0.98)
+Wrote Jupyter Notebook
