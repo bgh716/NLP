@@ -1,0 +1,14 @@
+U1) When initializing the heap, must account for the case in which the first word in the sentance, denoted w_0, did not occur as a bigram (<S>, w_0) in the bigram dataset.
+2) When initializing the heap, must accoutn for the case in which the first word in the sentance, denoted w_0, does not occur in the the vocabulary at all.
+3) Current method to deal with no next words is poor. Should deal with this case when pushing to heap at the end of each iteration, not at the start.
+4) Iterative algorithm to segment is not optimal. An optimal segmentation may have a relatively low probability for the first half and a relatively high probability for the second half. However once the iterative algorithm decides on a "best" segmentation for the first half of the sentance, it may be impossible to realize the actual segmentation.
+5) Error in segment at line 53, should be if text.find(newword, endindex + 1). Shouldnt use find here. Instead use regex.
+6) Error calculating probability at line 54.
+7) It may be a good strategy to always add new entries consisting of only a single character to the heap.
+8) May be a good strategy to always combine new adjacent unknown words together.
+
+Unigram Segment Original from Keenan: 0.81
+Unigram Segment Original w/multiplication dev score 0.65.
+Unigram Segment Original w/addition: 0.87
+Unigram Segment dev score 0.52.
+Bigram Segment Laplacian. 0.53

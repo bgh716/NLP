@@ -1,0 +1,5 @@
+1) Debugged some issues in initial Unigram Segmentation Algorithm
+2) Implemented Laplacian Bigram Probability Function
+3) Implemented Segmentation Algorithm Using Laplacian Bigram Probability Function
+4) Tested Two Methods for Dealing with Stops due to Unknown Words in Segmentation Algorithm
+5) Wrote Report

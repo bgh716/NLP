@@ -1,0 +1,25 @@
+
+
+
+
+problem:
+	when: implementing base line Algorithm: Iterative segmenter,
+	what: if we follow the algorithm on hw page, when a unknown word appear, the loop will stop. this cause the segmentation stop in middle
+	solve: if we found a unknown word, we make it a independent word in heap, then run loop again
+
+improvement: if there are 2 unknown words in sequence, we make them into one word. 
+
+
+smoothing: linear interpolation: alpha*pc1 + (1-alpha)*pc2
+	pc1 is +1 smoothed unigram
+	pc2 is +1 smoothed bigram
+
+	alpha = 0, score = 0.89
+	alpha = 0.4, score = 0.9
+	alpha = 0.5, score = 0.9
+	alpha = 0.8, score = 0.9
+
+impeovement:
+	dont segment "·０１２３４５６７８９"
+	if there is a unit following the numbers, dont segment it
+	
